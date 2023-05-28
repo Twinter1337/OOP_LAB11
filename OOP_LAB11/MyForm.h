@@ -11,6 +11,7 @@ namespace OOPLAB11 {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::IO;
 
 	/// <summary>
 	/// Сводка для MyForm
@@ -68,6 +69,8 @@ namespace OOPLAB11 {
 	private: System::Windows::Forms::TextBox^ text_box_val_is;
 
 	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
+	private: System::Windows::Forms::OpenFileDialog^ openFileDialog2;
 
 
 
@@ -121,6 +124,8 @@ namespace OOPLAB11 {
 			this->button_get_val = (gcnew System::Windows::Forms::Button());
 			this->button_clear = (gcnew System::Windows::Forms::Button());
 			this->button_fill = (gcnew System::Windows::Forms::Button());
+			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->openFileDialog2 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->menu->SuspendLayout();
 			this->panel_table->SuspendLayout();
 			this->panel_tool->SuspendLayout();
@@ -153,21 +158,23 @@ namespace OOPLAB11 {
 			// readToolStripMenuItem
 			// 
 			this->readToolStripMenuItem->Name = L"readToolStripMenuItem";
-			this->readToolStripMenuItem->Size = System::Drawing::Size(128, 26);
+			this->readToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->readToolStripMenuItem->Text = L"Read";
 			this->readToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::readToolStripMenuItem_Click);
 			// 
 			// writeToolStripMenuItem
 			// 
 			this->writeToolStripMenuItem->Name = L"writeToolStripMenuItem";
-			this->writeToolStripMenuItem->Size = System::Drawing::Size(128, 26);
+			this->writeToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->writeToolStripMenuItem->Text = L"Write";
+			this->writeToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::writeToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(128, 26);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->exitToolStripMenuItem->Text = L"Exit";
+			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::exitToolStripMenuItem_Click);
 			// 
 			// tableToolStripMenuItem
 			// 
@@ -402,6 +409,14 @@ namespace OOPLAB11 {
 			this->button_fill->UseVisualStyleBackColor = true;
 			this->button_fill->Click += gcnew System::EventHandler(this, &MyForm::button_fill_Click);
 			// 
+			// openFileDialog1
+			// 
+			this->openFileDialog1->FileName = L"C:\\files\\input_file.txt";
+			// 
+			// openFileDialog2
+			// 
+			this->openFileDialog2->FileName = L"openFileDialog2";
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
@@ -431,9 +446,16 @@ namespace OOPLAB11 {
 	private: System::Void button_fill_Click(System::Object^ sender, System::EventArgs^ e) {
 		for (int i = 0; i < table->ColumnCount; i++) {
 			for (int j = 0; j < table->RowCount; j++) {
+				Control^ ctrl = table->GetControlFromPosition(i, j);
+				table->Controls->Remove(ctrl);
+			}
+		}
+
+		for (int i = 0; i < table->ColumnCount; i++) {
+			for (int j = 0; j < table->RowCount; j++) {
 				this->table->Controls->Add(gcnew Label(), i, j);
 				if ((i >= (table->ColumnCount / 2) && j < (table->RowCount / 2)) || (i < (table->ColumnCount / 2) && j >= (table->RowCount / 2))) {
-					table->GetControlFromPosition(i, j)->Text = "1";
+					table->GetControlFromPosition(i, j)->Text = "0";
 				}
 				else {
 					table->GetControlFromPosition(i, j)->Text = "0";
@@ -466,7 +488,7 @@ namespace OOPLAB11 {
 			j = table->RowCount;
 		}
 		if (table->Controls->Count == 0) {
-			MessageBox::Show("\tNo cells to get\t");
+			MessageBox::Show("\tNo value to get!\t");
 			return;
 		}
 
@@ -477,10 +499,10 @@ namespace OOPLAB11 {
 		else {
 			MessageBox::Show("\tIncotect i or j!\t");
 		}
-		
+
 	}
 	private: System::Void button_set_val_Click(System::Object^ sender, System::EventArgs^ e) {
-		int i,j;
+		int i, j;
 		try {
 			i = i.Parse(text_box_j->Text);
 			j = j.Parse(text_box_i->Text);
@@ -490,7 +512,7 @@ namespace OOPLAB11 {
 			j = table->RowCount;
 		}
 		if (table->Controls->Count == 0) {
-			MessageBox::Show("\tNo cells to fill\t");
+			MessageBox::Show("\tNo cells to fill!\t");
 			return;
 		}
 
@@ -510,10 +532,48 @@ namespace OOPLAB11 {
 		}
 	}
 	private: System::Void table_Paint_1(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
-
 	}
 	private: System::Void readToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		String^ file_name;
 
+		if (openFileDialog1->ShowDialog() == Windows::Forms::DialogResult::OK) {
+			file_name = openFileDialog1->FileName;
+		}
+
+		try {
+			for (int i = 0; i < table->ColumnCount; i++) {
+				for (int j = 0; j < table->RowCount; j++) {
+					Control^ ctrl = table->GetControlFromPosition(i, j);
+					table->Controls->Remove(ctrl);
+				}
+			}
+			text_box_rows->Text = "0";
+			text_box_colums->Text = "0";
+			StreamReader^ file = File::OpenText(file_name);
+			String^ info = file->ReadLine();
+
+			int row = row.Parse(info);
+			text_box_rows->Text = info;
+			info = file->ReadLine();
+			int col = col.Parse(info);
+			text_box_colums->Text = info;
+			table->RowCount = row;
+			table->ColumnCount = col;
+			for (int i = 0; i < table->ColumnCount; i++) {
+				for (int j = 0; j < table->RowCount; j++) {
+					this->table->RowStyles->Add(gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50));
+					this->table->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 50));
+					this->table->Controls->Add(gcnew Label(), i, j);
+					info = file->ReadLine();
+					table->GetControlFromPosition(i, j)->Text = info;
+				}
+			}
+			file->Close();
+		}
+		catch (...) {
+			MessageBox::Show(this, "file wasn`t open!\t");
+			return;
+		}
 	}
 	private: System::Void table_CellPaint(System::Object^ sender, System::Windows::Forms::TableLayoutCellPaintEventArgs^ e) {
 	}
@@ -555,6 +615,27 @@ namespace OOPLAB11 {
 			table->ColumnCount = 1;
 			colums = 0;
 		}
+	}
+	private: System::Void writeToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		String^ file_name;
+
+		if (openFileDialog1->ShowDialog() == Windows::Forms::DialogResult::OK) {
+			file_name = openFileDialog1->FileName;
+		}
+
+		StreamWriter^ file_save = gcnew StreamWriter(file_name);
+		file_save->WriteLine(text_box_rows->Text);
+		file_save->WriteLine(text_box_colums->Text);
+
+		for (int i = 0; i < table->ColumnCount; i++) {
+			for (int j = 0; j < table->RowCount; j++) {
+				file_save->WriteLine(table->GetControlFromPosition(i, j)->Text);
+			}
+		}
+		file_save->Close();
+	}
+	private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		MyForm::Close();
 	}
 	};
 }
