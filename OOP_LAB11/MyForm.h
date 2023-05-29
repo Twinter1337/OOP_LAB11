@@ -158,21 +158,21 @@ namespace OOPLAB11 {
 			// readToolStripMenuItem
 			// 
 			this->readToolStripMenuItem->Name = L"readToolStripMenuItem";
-			this->readToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->readToolStripMenuItem->Size = System::Drawing::Size(128, 26);
 			this->readToolStripMenuItem->Text = L"Read";
 			this->readToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::readToolStripMenuItem_Click);
 			// 
 			// writeToolStripMenuItem
 			// 
 			this->writeToolStripMenuItem->Name = L"writeToolStripMenuItem";
-			this->writeToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->writeToolStripMenuItem->Size = System::Drawing::Size(128, 26);
 			this->writeToolStripMenuItem->Text = L"Write";
 			this->writeToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::writeToolStripMenuItem_Click);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(128, 26);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::exitToolStripMenuItem_Click);
 			// 
@@ -189,32 +189,37 @@ namespace OOPLAB11 {
 			// fillToolStripMenuItem
 			// 
 			this->fillToolStripMenuItem->Name = L"fillToolStripMenuItem";
-			this->fillToolStripMenuItem->Size = System::Drawing::Size(154, 26);
+			this->fillToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->fillToolStripMenuItem->Text = L"Fill";
+			this->fillToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::fillToolStripMenuItem_Click);
 			// 
 			// getValueToolStripMenuItem
 			// 
 			this->getValueToolStripMenuItem->Name = L"getValueToolStripMenuItem";
-			this->getValueToolStripMenuItem->Size = System::Drawing::Size(154, 26);
+			this->getValueToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->getValueToolStripMenuItem->Text = L"Get value";
+			this->getValueToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::getValueToolStripMenuItem_Click);
 			// 
 			// setValueToolStripMenuItem
 			// 
 			this->setValueToolStripMenuItem->Name = L"setValueToolStripMenuItem";
-			this->setValueToolStripMenuItem->Size = System::Drawing::Size(154, 26);
+			this->setValueToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->setValueToolStripMenuItem->Text = L"Set value";
+			this->setValueToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::setValueToolStripMenuItem_Click);
 			// 
 			// clearToolStripMenuItem
 			// 
 			this->clearToolStripMenuItem->Name = L"clearToolStripMenuItem";
-			this->clearToolStripMenuItem->Size = System::Drawing::Size(154, 26);
+			this->clearToolStripMenuItem->Size = System::Drawing::Size(224, 26);
 			this->clearToolStripMenuItem->Text = L"Clear";
+			this->clearToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::clearToolStripMenuItem_Click);
 			// 
 			// helpToolStripMenuItem
 			// 
 			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
 			this->helpToolStripMenuItem->Size = System::Drawing::Size(55, 24);
 			this->helpToolStripMenuItem->Text = L"Help";
+			this->helpToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::helpToolStripMenuItem_Click);
 			// 
 			// panel_table
 			// 
@@ -480,12 +485,12 @@ namespace OOPLAB11 {
 	private: System::Void button_get_val_Click(System::Object^ sender, System::EventArgs^ e) {
 		int i, j;
 		try {
-			i = i.Parse(text_box_j->Text);
-			j = j.Parse(text_box_i->Text);
+			i = i.Parse(text_box_i->Text);
+			j = j.Parse(text_box_j->Text);
 		}
 		catch (...) {
-			i = table->ColumnCount;
-			j = table->RowCount;
+			i = table->RowCount;
+			j = table->ColumnCount;
 		}
 		if (table->Controls->Count == 0) {
 			MessageBox::Show("\tNo value to get!\t");
@@ -493,8 +498,8 @@ namespace OOPLAB11 {
 		}
 
 		if ((i < table->RowCount && j < table->ColumnCount) || (i > table->RowCount && j > table->ColumnCount)) {
-			text_box_val_is->Text = table->GetControlFromPosition(i, j)->Text;
-			MessageBox::Show("\t   Value is " + table->GetControlFromPosition(i, j)->Text + "!\t");
+			text_box_val_is->Text = table->GetControlFromPosition(j, i)->Text;
+			MessageBox::Show("\t   Value is " + table->GetControlFromPosition(j, i)->Text + "!\t");
 		}
 		else {
 			MessageBox::Show("\tIncotect i or j!\t");
@@ -504,12 +509,12 @@ namespace OOPLAB11 {
 	private: System::Void button_set_val_Click(System::Object^ sender, System::EventArgs^ e) {
 		int i, j;
 		try {
-			i = i.Parse(text_box_j->Text);
-			j = j.Parse(text_box_i->Text);
+			i = i.Parse(text_box_i->Text);
+			j = j.Parse(text_box_j->Text);
 		}
 		catch (...) {
-			i = table->ColumnCount;
-			j = table->RowCount;
+			i = table->RowCount;
+			j = table->ColumnCount;
 		}
 		if (table->Controls->Count == 0) {
 			MessageBox::Show("\tNo cells to fill!\t");
@@ -519,12 +524,15 @@ namespace OOPLAB11 {
 		if ((i < table->RowCount && j < table->ColumnCount) || (i > table->RowCount && j > table->ColumnCount)) {
 			try {
 				int new_val = new_val.Parse(text_box_new_val->Text);
+				if (new_val > 1 || new_val < 0) {
+					throw exception();
+				}
 			}
 			catch (...) {
 				MessageBox::Show("\tIncotect value!\t");
 				return;
 			}
-			table->GetControlFromPosition(i, j)->Text = text_box_new_val->Text;
+			table->GetControlFromPosition(j, i)->Text = text_box_new_val->Text;
 			MessageBox::Show("\tValue changed!\t");
 		}
 		else {
@@ -538,6 +546,9 @@ namespace OOPLAB11 {
 
 		if (openFileDialog1->ShowDialog() == Windows::Forms::DialogResult::OK) {
 			file_name = openFileDialog1->FileName;
+		}
+		else {
+			return;
 		}
 
 		try {
@@ -559,12 +570,24 @@ namespace OOPLAB11 {
 			text_box_colums->Text = info;
 			table->RowCount = row;
 			table->ColumnCount = col;
+
 			for (int i = 0; i < table->ColumnCount; i++) {
 				for (int j = 0; j < table->RowCount; j++) {
+					info = file->ReadLine();
+					try {
+						int new_val = new_val.Parse(info);
+						if (new_val > 1 || new_val < 0) {
+							throw exception();
+						}
+					}
+					catch (...) {
+						MessageBox::Show("\tIncotect value!\t");
+						file->Close();
+						return;
+					}
 					this->table->RowStyles->Add(gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50));
 					this->table->ColumnStyles->Add(gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent, 50));
 					this->table->Controls->Add(gcnew Label(), i, j);
-					info = file->ReadLine();
 					table->GetControlFromPosition(i, j)->Text = info;
 				}
 			}
@@ -622,6 +645,9 @@ namespace OOPLAB11 {
 		if (openFileDialog1->ShowDialog() == Windows::Forms::DialogResult::OK) {
 			file_name = openFileDialog1->FileName;
 		}
+		else {
+			return;
+		}
 
 		StreamWriter^ file_save = gcnew StreamWriter(file_name);
 		file_save->WriteLine(text_box_rows->Text);
@@ -637,5 +663,26 @@ namespace OOPLAB11 {
 	private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		MyForm::Close();
 	}
-	};
+	private: System::Void fillToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		button_fill_Click(sender, e);
+	}
+	private: System::Void clearToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		button_clear_Click(sender, e);
+	}
+	private: System::Void getValueToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		button_get_val_Click(sender, e);
+	}
+
+	private: System::Void setValueToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		button_set_val_Click(sender, e);
+	}
+	private: System::Void helpToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		MessageBox::Show("File:\nRead - reading table from your file.\n" +
+			"Write - writing table in your file.\n" +
+			"Exit - exit program.\n" + "\nTable:\nFill - filling all cells in the table by 0.\n" +
+			"Set value - setting value by new in i j cell.\n" +
+			"Get value - getting value by new in i j cell.\n" +
+			"Clear - clearing all values from cells.\n");
+	}
+};
 }
