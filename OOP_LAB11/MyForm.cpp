@@ -1,3 +1,4 @@
+#include "MyForm1.h"
 #include "MyForm.h"
 
 using namespace System;
@@ -7,6 +8,7 @@ using namespace System::Windows::Forms;
 int main() {
 	Application::SetCompatibleTextRenderingDefault(false);
 	Application::EnableVisualStyles();
-	OOPLAB11::MyForm form;
+	OOPLAB11::MyForm1 form;
 	Application::Run(% form);
+
 }

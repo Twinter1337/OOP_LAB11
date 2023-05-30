@@ -160,7 +160,7 @@ namespace OOPLAB11 {
 			// 
 			this->readToolStripMenuItem->Name = L"readToolStripMenuItem";
 			this->readToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::R));
-			this->readToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->readToolStripMenuItem->Size = System::Drawing::Size(184, 26);
 			this->readToolStripMenuItem->Text = L"Read";
 			this->readToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::readToolStripMenuItem_Click);
 			// 
@@ -168,7 +168,7 @@ namespace OOPLAB11 {
 			// 
 			this->writeToolStripMenuItem->Name = L"writeToolStripMenuItem";
 			this->writeToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Control | System::Windows::Forms::Keys::W));
-			this->writeToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->writeToolStripMenuItem->Size = System::Drawing::Size(184, 26);
 			this->writeToolStripMenuItem->Text = L"Write";
 			this->writeToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::writeToolStripMenuItem_Click);
 			// 
@@ -176,7 +176,7 @@ namespace OOPLAB11 {
 			// 
 			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
 			this->exitToolStripMenuItem->ShortcutKeys = static_cast<System::Windows::Forms::Keys>((System::Windows::Forms::Keys::Alt | System::Windows::Forms::Keys::F4));
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->exitToolStripMenuItem->Size = System::Drawing::Size(184, 26);
 			this->exitToolStripMenuItem->Text = L"Exit";
 			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::exitToolStripMenuItem_Click);
 			// 
@@ -193,28 +193,28 @@ namespace OOPLAB11 {
 			// fillToolStripMenuItem
 			// 
 			this->fillToolStripMenuItem->Name = L"fillToolStripMenuItem";
-			this->fillToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->fillToolStripMenuItem->Size = System::Drawing::Size(154, 26);
 			this->fillToolStripMenuItem->Text = L"Fill";
 			this->fillToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::fillToolStripMenuItem_Click);
 			// 
 			// getValueToolStripMenuItem
 			// 
 			this->getValueToolStripMenuItem->Name = L"getValueToolStripMenuItem";
-			this->getValueToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->getValueToolStripMenuItem->Size = System::Drawing::Size(154, 26);
 			this->getValueToolStripMenuItem->Text = L"Get value";
 			this->getValueToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::getValueToolStripMenuItem_Click);
 			// 
 			// setValueToolStripMenuItem
 			// 
 			this->setValueToolStripMenuItem->Name = L"setValueToolStripMenuItem";
-			this->setValueToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->setValueToolStripMenuItem->Size = System::Drawing::Size(154, 26);
 			this->setValueToolStripMenuItem->Text = L"Set value";
 			this->setValueToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::setValueToolStripMenuItem_Click);
 			// 
 			// clearToolStripMenuItem
 			// 
 			this->clearToolStripMenuItem->Name = L"clearToolStripMenuItem";
-			this->clearToolStripMenuItem->Size = System::Drawing::Size(224, 26);
+			this->clearToolStripMenuItem->Size = System::Drawing::Size(154, 26);
 			this->clearToolStripMenuItem->Text = L"Clear";
 			this->clearToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::clearToolStripMenuItem_Click);
 			// 
@@ -436,9 +436,13 @@ namespace OOPLAB11 {
 			this->Controls->Add(this->panel_tool);
 			this->Controls->Add(this->panel_table);
 			this->Controls->Add(this->menu);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MainMenuStrip = this->menu;
 			this->Name = L"MyForm";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Table";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &MyForm::MyForm_FormClosing);
+			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
 			this->menu->ResumeLayout(false);
 			this->menu->PerformLayout();
 			this->panel_table->ResumeLayout(false);
@@ -665,7 +669,7 @@ namespace OOPLAB11 {
 		file_save->Close();
 	}
 	private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		MyForm::Close();
+		Application::Exit();
 	}
 	private: System::Void fillToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		button_fill_Click(sender, e);
@@ -688,5 +692,11 @@ namespace OOPLAB11 {
 			"Get value - getting value by new in i j cell.\n" +
 			"Clear - clearing all values from cells.\n");
 	}
+private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
+	
+}
+private: System::Void MyForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
+	Application::Exit();
+}
 };
 }
