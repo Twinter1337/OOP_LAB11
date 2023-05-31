@@ -10,5 +10,4 @@ int main() {
 	Application::EnableVisualStyles();
 	OOPLAB11::MyForm1 form;
 	Application::Run(% form);
-
 }
