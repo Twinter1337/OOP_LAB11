@@ -77,6 +77,13 @@ namespace OOPLAB11 {
 
 
 
+	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog1;
+	private: System::ComponentModel::IContainer^ components;
+
+
+
+
+
 
 
 
@@ -87,7 +94,7 @@ namespace OOPLAB11 {
 		/// <summary>
 		/// Обязательная переменная конструктора.
 		/// </summary>
-		System::ComponentModel::Container^ components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -127,6 +134,7 @@ namespace OOPLAB11 {
 			this->button_fill = (gcnew System::Windows::Forms::Button());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->openFileDialog2 = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->menu->SuspendLayout();
 			this->panel_table->SuspendLayout();
 			this->panel_tool->SuspendLayout();
@@ -142,7 +150,7 @@ namespace OOPLAB11 {
 			});
 			this->menu->Location = System::Drawing::Point(0, 0);
 			this->menu->Name = L"menu";
-			this->menu->Size = System::Drawing::Size(951, 28);
+			this->menu->Size = System::Drawing::Size(951, 30);
 			this->menu->TabIndex = 0;
 			this->menu->Text = L"menuStrip1";
 			// 
@@ -153,7 +161,7 @@ namespace OOPLAB11 {
 					this->writeToolStripMenuItem, this->exitToolStripMenuItem
 			});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
-			this->fileToolStripMenuItem->Size = System::Drawing::Size(46, 24);
+			this->fileToolStripMenuItem->Size = System::Drawing::Size(46, 26);
 			this->fileToolStripMenuItem->Text = L"File";
 			// 
 			// readToolStripMenuItem
@@ -187,7 +195,7 @@ namespace OOPLAB11 {
 					this->getValueToolStripMenuItem, this->setValueToolStripMenuItem, this->clearToolStripMenuItem
 			});
 			this->tableToolStripMenuItem->Name = L"tableToolStripMenuItem";
-			this->tableToolStripMenuItem->Size = System::Drawing::Size(58, 24);
+			this->tableToolStripMenuItem->Size = System::Drawing::Size(58, 26);
 			this->tableToolStripMenuItem->Text = L"Table";
 			// 
 			// fillToolStripMenuItem
@@ -221,7 +229,7 @@ namespace OOPLAB11 {
 			// helpToolStripMenuItem
 			// 
 			this->helpToolStripMenuItem->Name = L"helpToolStripMenuItem";
-			this->helpToolStripMenuItem->Size = System::Drawing::Size(55, 24);
+			this->helpToolStripMenuItem->Size = System::Drawing::Size(55, 26);
 			this->helpToolStripMenuItem->Text = L"Help";
 			this->helpToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::helpToolStripMenuItem_Click);
 			// 
@@ -650,23 +658,30 @@ namespace OOPLAB11 {
 	private: System::Void writeToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		String^ file_name;
 
-		if (openFileDialog1->ShowDialog() == Windows::Forms::DialogResult::OK) {
-			file_name = openFileDialog1->FileName;
+		if (saveFileDialog1->ShowDialog() == Windows::Forms::DialogResult::OK) {
+			file_name = saveFileDialog1->FileName;
 		}
 		else {
 			return;
 		}
 
 		StreamWriter^ file_save = gcnew StreamWriter(file_name);
-		file_save->WriteLine(text_box_rows->Text);
-		file_save->WriteLine(text_box_colums->Text);
+		try {
+			file_save->WriteLine(text_box_rows->Text);
+			file_save->WriteLine(text_box_colums->Text);
 
-		for (int i = 0; i < table->ColumnCount; i++) {
-			for (int j = 0; j < table->RowCount; j++) {
-				file_save->WriteLine(table->GetControlFromPosition(i, j)->Text);
+			for (int i = 0; i < table->ColumnCount; i++) {
+				for (int j = 0; j < table->RowCount; j++) {
+					file_save->WriteLine(table->GetControlFromPosition(i, j)->Text);
+				}
 			}
+
+			file_save->Close();
 		}
-		file_save->Close();
+		catch (...) {
+			MessageBox::Show("\tThe table is empty!\t");
+			file_save->Close();
+		}
 	}
 	private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Application::Exit();
@@ -698,5 +713,6 @@ private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) 
 private: System::Void MyForm_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
 	Application::Exit();
 }
+
 };
 }

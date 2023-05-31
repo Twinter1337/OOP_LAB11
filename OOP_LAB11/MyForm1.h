@@ -84,8 +84,10 @@ namespace OOPLAB11 {
 	private: System::Void MyForm1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 	}
 	private: System::Void MyForm1_Enter(System::Object^ sender, System::EventArgs^ e) {
+		
 	}
 	private: System::Void MyForm1_Load(System::Object^ sender, System::EventArgs^ e) {
+		
 	}
 	private: System::Void MyForm1_Shown(System::Object^ sender, System::EventArgs^ e) {	
 		Sleep(2000);
@@ -96,6 +98,7 @@ namespace OOPLAB11 {
 	private: System::Void MyForm1_ControlAdded(System::Object^ sender, System::Windows::Forms::ControlEventArgs^ e) {
 	}
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		
 	}
 };
 }
